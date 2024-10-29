@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import travel.w2m.pruebaw2m.dto.SpaceShip;
+import travel.w2m.pruebaw2m.exception.SpaceShipNotFoundException;
 
 /**
  * The Interface SpaceShipService.
@@ -20,8 +21,9 @@ public interface SpaceShipService {
 	 * @param id
 	 *        the id
 	 * @return the space ship by id
+	 * @throws SpaceShipNotFoundException
 	 */
-	public Optional<SpaceShip> getSpaceShipById (int id);
+	public Optional<SpaceShip> getSpaceShipById (Integer id);
 
 	/**
 	 * Gets the space ships.
@@ -62,5 +64,5 @@ public interface SpaceShipService {
 	 * @param id
 	 *        the id
 	 */
-	public void deleteSpaceSihp (int id);
+	public void deleteSpaceSihp (Integer id);
 }

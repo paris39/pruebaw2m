@@ -20,6 +20,7 @@ public abstract class AbstractMapper <T, S> {
 	 * @param item
 	 *        the item
 	 * @return the t
+	 * @throws Exception
 	 */
 	public abstract T map (S entity);
 

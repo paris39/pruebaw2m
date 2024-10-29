@@ -15,11 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.Data;
 import travel.w2m.pruebaw2m.dto.SpaceShip;
+import travel.w2m.pruebaw2m.exception.SpaceShipNotFoundException;
 import travel.w2m.pruebaw2m.model.service.SpaceShipService;
 
-@Data
 @RestController
 @RequestMapping ("/spaceShips")
 public class SpaceShipRestController {
@@ -45,6 +44,7 @@ public class SpaceShipRestController {
 	 * @param id
 	 *        the id
 	 * @return the space ship by id
+	 * @throws SpaceShipNotFoundException
 	 */
 	@GetMapping (value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Optional<SpaceShip> getSpaceShipById (@RequestParam (required = true) final Integer id) {
@@ -94,7 +94,7 @@ public class SpaceShipRestController {
 	 *        the id
 	 */
 	@DeleteMapping (value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-	public void deleteSpaceShip (@RequestParam (required = true) final int id) {
+	public void deleteSpaceShip (@RequestParam (required = true) final Integer id) {
 		spaceShipService.deleteSpaceSihp(id);
 	}
 
