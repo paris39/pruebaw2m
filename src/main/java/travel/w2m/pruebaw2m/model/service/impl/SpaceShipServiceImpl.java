@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import travel.w2m.pruebaw2m.dto.SpaceShip;
 import travel.w2m.pruebaw2m.model.dao.SpaceShipDAO;
 import travel.w2m.pruebaw2m.model.entity.SpaceShipEntity;
 import travel.w2m.pruebaw2m.model.mapper.SpaceShipMapper;
 import travel.w2m.pruebaw2m.model.service.SpaceShipService;
 
+@Slf4j
 @Service (value = "spaceShipService")
 public class SpaceShipServiceImpl implements SpaceShipService {
 
@@ -32,6 +34,7 @@ public class SpaceShipServiceImpl implements SpaceShipService {
 			refreshCache();
 		}
 		// return Optional.ofNullable(spaceShipMapper.map(spaceShipDAO.getReferenceById(id)));
+		log.info("Búsqueda por ID: {}", id);
 		return Optional
 			.ofNullable(spaceShipListCache.stream().filter(spaceShip -> spaceShip.getId().equals(id)).findAny()
 				.orElse(null));
@@ -43,6 +46,7 @@ public class SpaceShipServiceImpl implements SpaceShipService {
 		if (null == spaceShipListCache || 0 == spaceShipListCache.size()) {
 			refreshCache();
 		}
+		log.info("Búsqueda paginada: {}", pageable.toString());
 		return Optional.ofNullable(spaceShipMapper.map(spaceShipDAO.findAll(pageable).getContent()));
 	}
 
@@ -53,6 +57,7 @@ public class SpaceShipServiceImpl implements SpaceShipService {
 			refreshCache();
 		}
 		// return Optional.ofNullable(spaceShipMapper.map(spaceShipDAO.findByNameContains(name)));
+		log.info("Búsqueda por nombre: '{}'", name);
 		return Optional
 			.ofNullable(
 				spaceShipListCache.stream().filter(spaceShip -> spaceShip.getName().contains(new StringBuffer(name)))
@@ -65,6 +70,7 @@ public class SpaceShipServiceImpl implements SpaceShipService {
 		entity.setName(name);
 
 		Optional<SpaceShip> result = Optional.ofNullable(spaceShipMapper.map(spaceShipDAO.save(entity)));
+		log.info("Se ha guardado el registro {} en BBDD correctamente", result.get().getId());
 		refreshCache();
 
 		return result;
@@ -76,6 +82,7 @@ public class SpaceShipServiceImpl implements SpaceShipService {
 		spaceShipEntityAux.setName(spaceShip.getName());
 
 		Optional<SpaceShip> result = Optional.ofNullable(spaceShipMapper.map(spaceShipDAO.save(spaceShipEntityAux)));
+		log.info("Se ha modificado el registro {} en BBDD correctamente", result.get().getId());
 		refreshCache();
 
 		return result;
@@ -84,6 +91,7 @@ public class SpaceShipServiceImpl implements SpaceShipService {
 	@Override
 	public void deleteSpaceSihp (Integer id) {
 		spaceShipDAO.deleteById(id);
+		log.info("Se ha eliminado el registro {} en BBDD correctamente", id);
 		refreshCache();
 	}
 
@@ -95,5 +103,6 @@ public class SpaceShipServiceImpl implements SpaceShipService {
 			spaceShipListCache.clear();
 		}
 		spaceShipListCache = spaceShipMapper.map((spaceShipDAO.findAll()));
+		log.debug("Se ha refrescado la caché de resultados");
 	}
 }
